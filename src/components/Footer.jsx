@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { ExternalLink } from 'lucide-react';
 import { BrandLogo } from './ui';
 import { NAV_LINKS } from '../data/content';
@@ -25,7 +26,7 @@ export default function Footer() {
         <nav className="footer__col" aria-label="Footer">
           <h3>Explore</h3>
           {NAV_LINKS.map((link) => (
-            <a key={link.href} href={link.href}>{link.label}</a>
+            <Link key={link.to} to={link.to}>{link.label}</Link>
           ))}
         </nav>
 
@@ -39,7 +40,7 @@ export default function Footer() {
               {s.label}
             </a>
           ))}
-          <a href="#booking">Request an Appointment</a>
+          <Link to="/contact">Request an Appointment</Link>
         </div>
 
         <div className="footer__map">

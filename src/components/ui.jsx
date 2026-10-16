@@ -1,4 +1,5 @@
 // Small shared building blocks used across sections.
+import { Link } from 'react-router-dom';
 import { CalendarDays, Phone } from 'lucide-react';
 import { BUSINESS, telHref } from '../config/business';
 import { EVENTS, track } from '../lib/analytics';
@@ -8,9 +9,9 @@ export const LOGO_SRC = '/Royal%20Lotus%20Nails%20&%20Spa%20Logo.png';
 
 export function BrandLogo({ size = 'md' }) {
   return (
-    <a href="#home" className={`brand brand--${size}`} aria-label={`${BUSINESS.businessName} — back to top`}>
+    <Link to="/" className={`brand brand--${size}`} aria-label={`${BUSINESS.businessName} — home`}>
       <img src={LOGO_SRC} alt={BUSINESS.businessName} width="1536" height="1024" />
-    </a>
+    </Link>
   );
 }
 
@@ -48,23 +49,27 @@ export function LotusMark({ className = '' }) {
   );
 }
 
-export const bookingHref = BUSINESS.bookingUrl || '#booking';
-const bookingExternal = BUSINESS.bookingUrl ? { target: '_blank', rel: 'noopener noreferrer' } : {};
+export const bookingHref = BUSINESS.bookingUrl || '/contact';
+const bookingExternal = BUSINESS.bookingUrl ? { target: '_blank', rel: 'noopener noreferrer' } : null;
 
 export function BookButton({ children = 'Book an Appointment', variant = 'primary', icon = false, className = '', location, onClick }) {
-  return (
-    <a
-      href={bookingHref}
-      {...bookingExternal}
-      className={`btn btn--${variant} ${className}`}
-      onClick={() => {
-        track(EVENTS.book, { location });
-        onClick?.();
-      }}
-    >
+  const props = {
+    className: `btn btn--${variant} ${className}`,
+    onClick: () => {
+      track(EVENTS.book, { location });
+      onClick?.();
+    },
+  };
+  const content = (
+    <>
       {icon && <CalendarDays size={17} strokeWidth={1.6} aria-hidden="true" />}
       {children}
-    </a>
+    </>
+  );
+  return bookingExternal ? (
+    <a href={bookingHref} {...bookingExternal} {...props}>{content}</a>
+  ) : (
+    <Link to={bookingHref} {...props}>{content}</Link>
   );
 }
 

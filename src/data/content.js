@@ -2,12 +2,12 @@
 //
 // Images live in public/<Folder>/ and are referenced by absolute path.
 const IMG = {
-  manicure: ['23449da1aef18148df58a26fe6584ac7', '69d41d299a8f33b1a5e9dd390af411b8', '8b16ce6e0c96ffe6d6a5b61f3124313e'],
-  pedicure: ['181681ca6e56b4ea8d8c5b454e0a7850', '1a278abef4457eb7c6eb3b303fe4731b', 'a717618386a40ad7810fd57da7c1d0a6'],
-  nailArt: ['4b1e56a94b0dcbc3512b76e35fc38d81', '69300abff7d71f6c6a58dc5b68db77e8', '6adbe6a1b27c949f416e8c15372320ca', '86008f2fb5edb527416d3b94a13b4894'],
-  facial: ['0bdc1b13923be2b4686488a874f7b353', '2d3babd45c85707021ba484d6b560716', 'd6871c116de40f19f0b92c3871d1975c', 'fdc4051627ff930ccd716a523706449c'],
-  waxing: ['5bdc293699845e72c1cc12e52b92022f', 'cb4a2feeaba355828b2d5b12e232405b'],
-  eyelash: ['026e0310c725eba38195681ce6227bc9', '8e1877642a1e163ca6a8965beef4d157', '91d2dbd741842339c7713f0f0cef31d8', 'a6c3737c3b44348b8ce7bd2b17b274e2'],
+  manicure: ['23449da1aef18148df58a26fe6584ac7.jpg', '69d41d299a8f33b1a5e9dd390af411b8.jpg', '8b16ce6e0c96ffe6d6a5b61f3124313e.jpg', '4d63fe3dcedaab699da29d0829e8eeb4.jpg', 'tải xuống.png'],
+  pedicure: ['181681ca6e56b4ea8d8c5b454e0a7850.jpg', '1a278abef4457eb7c6eb3b303fe4731b.jpg', 'a717618386a40ad7810fd57da7c1d0a6.jpg', '8c31bb715615b60511ce408189630640.jpg', 'd8fe80d1b3c994594a8ca387c448f84b.jpg'],
+  nailArt: ['4b1e56a94b0dcbc3512b76e35fc38d81.jpg', '69300abff7d71f6c6a58dc5b68db77e8.jpg', '6adbe6a1b27c949f416e8c15372320ca.jpg', '86008f2fb5edb527416d3b94a13b4894.jpg', '69c1495ed7233dfd16114a284a169cd6.jpg'],
+  facial: ['0bdc1b13923be2b4686488a874f7b353.jpg', '2d3babd45c85707021ba484d6b560716.jpg', 'd6871c116de40f19f0b92c3871d1975c.jpg', 'fdc4051627ff930ccd716a523706449c.jpg', 'tải xuống.png'],
+  waxing: ['5bdc293699845e72c1cc12e52b92022f.jpg', 'cb4a2feeaba355828b2d5b12e232405b.jpg', '10611232f5ef6b42fba74e87d79cea07.jpg', '75ac7de27e29842f20b8ee2887ef140d.jpg', 'ba4e0077ec828d78b882d904b321b0ec.jpg'],
+  eyelash: ['026e0310c725eba38195681ce6227bc9.jpg', '8e1877642a1e163ca6a8965beef4d157.jpg', '91d2dbd741842339c7713f0f0cef31d8.jpg', 'a6c3737c3b44348b8ce7bd2b17b274e2.jpg', '21727c7f935d2d05b5708ac802c45c33.jpg'],
 };
 const FOLDER = { manicure: 'Manicure', pedicure: 'Pedicure', nailArt: 'Nails-Art', facial: 'Facial', waxing: 'Waxing', eyelash: 'Eyelashes' };
 const ALT = {
@@ -18,16 +18,15 @@ const ALT = {
   waxing: 'Waxing and brow service',
   eyelash: 'Eyelash service',
 };
-const pic = (cat, i) => `/${FOLDER[cat]}/${IMG[cat][i]}.jpg`;
+const pic = (cat, i) => encodeURI(`/${FOLDER[cat]}/${IMG[cat][i]}`);
 const photo = (cat, i) => ({ src: pic(cat, i), alt: ALT[cat] });
 
 export const NAV_LINKS = [
-  { label: 'Home', href: '#home' },
-  { label: 'Services', href: '#services' },
-  { label: 'About', href: '#about' },
-  { label: 'Why Us', href: '#why' },
-  { label: 'Gallery', href: '#gallery' },
-  { label: 'FAQ', href: '#faq' },
+  { label: 'Home', to: '/' },
+  { label: 'Services', to: '/services', sub: true }, // dropdown lists SERVICES
+  { label: 'Gallery', to: '/gallery' },
+  { label: 'About', to: '/about' },
+  { label: 'Contact', to: '/contact' },
 ];
 
 export const IMAGES = {
@@ -133,6 +132,33 @@ export const SERVICES = [
 
 // Decorative photos flanking the FAQ list (desktop only).
 export const FAQ_IMAGES = [pic('eyelash', 0), pic('nailArt', 1)];
+
+// Intro copy for each service's detail page. Deliberately general: no prices, durations or
+// availability are stated until the salon confirms them.
+const DETAILS = {
+  manicure:
+    'A manicure is a gentle routine of shaping, cuticle care and polish, leaving your hands looking and feeling well kept. Get in touch with the salon to ask about the finishes and options available.',
+  pedicure:
+    'A pedicure is a relaxing treat for tired feet: soaking, shaping and polish for a fresh, tidy finish. Contact the salon to ask which pedicure options are on offer.',
+  'nail-art':
+    'Nail art is where your personality shows: colour, design and small details that make your nails one of a kind. Share your inspiration with the salon and ask what styles can be created.',
+  facial:
+    'A facial is a calm, restorative pause for your skin. Contact the salon to ask which facial treatments are offered and which one suits you best.',
+  waxing:
+    'Waxing helps you feel fresh and smooth. Ask the salon which waxing services are available and how to prepare for your visit.',
+  eyelash:
+    'Eyelash services are designed to enhance your natural look, one lash at a time. Get in touch with the salon to ask about the options available.',
+};
+SERVICES.forEach((sv) => {
+  sv.description = DETAILS[sv.id];
+});
+// Each service uses every photo in its own public/<Folder>/ (first = cover, rest = `more`).
+const SERVICE_CATEGORY = { manicure: 'manicure', pedicure: 'pedicure', 'nail-art': 'nailArt', facial: 'facial', waxing: 'waxing', eyelash: 'eyelash' };
+SERVICES.forEach((sv) => {
+  const cat = SERVICE_CATEGORY[sv.id];
+  sv.image = pic(cat, 0);
+  sv.more = IMG[cat].slice(1).map((_, i) => photo(cat, i + 1));
+});
 
 export const SERVICE_OPTIONS = [...SERVICES.map((s) => s.formValue), 'Multiple Services', 'Other'];
 

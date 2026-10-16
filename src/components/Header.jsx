@@ -1,20 +1,23 @@
 import { useEffect, useRef, useState } from 'react';
-import { Menu, X } from 'lucide-react';
+import { Link, NavLink, useLocation } from 'react-router-dom';
+import { ArrowRight, ChevronDown, Menu, X } from 'lucide-react';
 import { BookButton, BrandLogo, CallButton } from './ui';
 import { BUSINESS } from '../config/business';
-import { NAV_LINKS } from '../data/content';
+import { NAV_LINKS, SERVICES } from '../data/content';
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [theme, setTheme] = useState('top'); // top (over the hero) | wine | cream
   const [open, setOpen] = useState(false);
-  const [current, setCurrent] = useState('#home');
+  const { pathname } = useLocation();
+  const [megaClosed, setMegaClosed] = useState(false);
+  const [megaId, setMegaId] = useState(SERVICES[0].id); // service previewed in the Services menu
   const menuRef = useRef(null);
 
   useEffect(() => {
     // Which section sits under the bar decides its colour: transparent over the hero,
     // wine over wine sections and the footer, cream over everything else.
-    const WINE = ['services', 'why', 'faq', 'footer'];
+    const WINE = ['services', 'why', 'faq', 'footer', 'svc-hero'];
     let frame = 0;
     const update = () => {
       frame = 0;
@@ -36,6 +39,7 @@ export default function Header() {
       if (!frame) frame = requestAnimationFrame(update);
     };
     update();
+    onScroll(); // again after the new page has been laid out and scrolled to the top
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onScroll);
     return () => {
@@ -43,21 +47,7 @@ export default function Header() {
       window.removeEventListener('resize', onScroll);
       if (frame) cancelAnimationFrame(frame);
     };
-  }, []);
-
-  // Highlight the nav link of the section that is currently in view.
-  useEffect(() => {
-    const sections = NAV_LINKS.map((l) => document.querySelector(l.href)).filter(Boolean);
-    if (!sections.length || !('IntersectionObserver' in window)) return undefined;
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => e.isIntersecting && setCurrent(`#${e.target.id}`));
-      },
-      { rootMargin: '-45% 0px -50% 0px' }
-    );
-    sections.forEach((s) => io.observe(s));
-    return () => io.disconnect();
-  }, []);
+  }, [pathname]);
 
   useEffect(() => {
     // Closed menu is removed from the tab order and accessibility tree.
@@ -68,7 +58,13 @@ export default function Header() {
     return () => window.removeEventListener('keydown', onKey);
   }, [open]);
 
+  useEffect(() => setOpen(false), [pathname]);
+
   const close = () => setOpen(false);
+
+  const mega = SERVICES.find((sv) => sv.id === megaId) || SERVICES[0];
+  const pool = [mega.image, ...(mega.more || []).map((m) => m.src)];
+  const megaPhotos = Array.from({ length: 5 }, (_, i) => pool[i % pool.length]);
 
   return (
     <header className={`header${scrolled ? ' header--scrolled' : ''}${theme !== 'top' || open ? ' header--solid' : ''}${theme === 'wine' || open ? ' header--dark' : ''}${open ? ' header--open' : ''}`}>
@@ -76,9 +72,56 @@ export default function Header() {
         <BrandLogo />
 
         <nav className="header__nav" aria-label="Main">
-          {NAV_LINKS.map((link) => (
-            <a key={link.href} href={link.href} className={current === link.href ? 'is-active' : undefined} aria-current={current === link.href ? 'location' : undefined}>{link.label}</a>
-          ))}
+          {NAV_LINKS.map((link) => {
+            const item = (
+              <NavLink to={link.to} end={!link.sub} className={({ isActive }) => (isActive ? 'is-active' : undefined)}>
+                {link.label}
+                {link.sub && <ChevronDown size={14} strokeWidth={1.8} aria-hidden="true" />}
+              </NavLink>
+            );
+            return link.sub ? (
+              <div
+                key={link.to}
+                className={`nav-item nav-item--sub${megaClosed ? ' is-closed' : ''}`}
+                onMouseLeave={() => setMegaClosed(false)}
+                onClick={() => setMegaClosed(true)}
+              >
+                {item}
+                <div className="nav-sub">
+                  <div className="nav-sub__inner">
+                    <div className="nav-sub__info">
+                      <p className="nav-sub__eyebrow">Explore</p>
+                      <Link to="/services" className="nav-sub__title">
+                        {mega.title} <ArrowRight size={20} strokeWidth={1.6} aria-hidden="true" />
+                      </Link>
+                      <p className="nav-sub__text">{mega.tagline}</p>
+                      <ul className="nav-sub__pills">
+                        {SERVICES.map((sv) => (
+                          <li key={sv.id}>
+                            <Link
+                              to={`/services/${sv.id}`}
+                              className={sv.id === megaId ? 'is-hover' : undefined}
+                              onMouseEnter={() => setMegaId(sv.id)}
+                              onFocus={() => setMegaId(sv.id)}
+                            >
+                              {sv.title}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    <div className="nav-sub__photos" key={mega.id} aria-hidden="true">
+                      {megaPhotos.map((src, i) => (
+                        <img key={i} src={src} alt="" loading="lazy" decoding="async" />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div key={link.to} className="nav-item">{item}</div>
+            );
+          })}
         </nav>
 
         <p className="header__marquee" aria-label={BUSINESS.tagline}>
@@ -104,7 +147,16 @@ export default function Header() {
       <div ref={menuRef} className={`mobile-menu${open ? ' is-open' : ''}`} id="mobile-menu">
         <nav aria-label="Mobile">
           {NAV_LINKS.map((link) => (
-            <a key={link.href} href={link.href} onClick={close} className={current === link.href ? 'is-active' : undefined}>{link.label}</a>
+            <div key={link.to} className="mobile-menu__item">
+              <NavLink to={link.to} end={!link.sub} onClick={close} className={({ isActive }) => (isActive ? 'is-active' : undefined)}>{link.label}</NavLink>
+              {link.sub && (
+                <div className="mobile-menu__sub">
+                  {SERVICES.map((sv) => (
+                    <Link key={sv.id} to={`/services/${sv.id}`} onClick={close}>{sv.title}</Link>
+                  ))}
+                </div>
+              )}
+            </div>
           ))}
         </nav>
         <div className="mobile-menu__actions">

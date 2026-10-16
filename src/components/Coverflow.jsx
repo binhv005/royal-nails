@@ -5,11 +5,17 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 // in perspective. Click a side card, use the arrows / arrow keys, or swipe/drag to move.
 // Cards wrap around. `renderItem(item, index, isActive)` draws a card's content; side
 // cards are inert (not focusable) and covered by a button that brings them to the centre.
-export default function Coverflow({ items, renderItem, label, ariaLabel, className = '' }) {
+export default function Coverflow({ items, renderItem, label, ariaLabel, className = '', focusId }) {
   const [active, setActive] = useState(0);
   const n = items.length;
   const half = Math.floor(n / 2);
   const gesture = useRef({ x: null, applied: 0, moved: false });
+
+  // Jump to a given card (e.g. from the Services dropdown).
+  useEffect(() => {
+    const i = items.findIndex((it) => it.id === focusId);
+    if (i >= 0) setActive(i);
+  }, [focusId, items]);
 
   const go = useCallback((d) => setActive((a) => (a + d + n) % n), [n]);
 

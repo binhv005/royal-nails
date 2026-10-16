@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import Img from './Img';
 import { LotusMark, SectionHeading } from './ui';
@@ -32,9 +33,9 @@ export default function AboutSection() {
               Whether you are exploring a new nail look or looking for beauty services to complement your routine, we
               invite you to discover the options available at our salon.
             </p>
-            <a href="#booking" className="btn btn--secondary">
+            <Link to="/contact" className="btn btn--secondary">
               Contact Our Team <ArrowRight size={16} strokeWidth={1.6} aria-hidden="true" />
-            </a>
+            </Link>
           </div>
 
           <div className="about__pair">

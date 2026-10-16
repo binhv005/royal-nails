@@ -1,21 +1,26 @@
 import { useEffect } from 'react';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import Header from './components/Header';
-import HeroSection from './components/HeroSection';
-import ServicesSection from './components/ServicesSection';
-import WhyChooseUsSection from './components/WhyChooseUsSection';
-import GallerySection from './components/GallerySection';
-import AboutSection from './components/AboutSection';
-import BookingSection from './components/BookingSection';
-import FAQSection from './components/FAQSection';
-import FinalCTASection from './components/FinalCTASection';
 import Footer from './components/Footer';
 import MobileCTA from './components/MobileCTA';
 import StructuredData from './components/StructuredData';
+import Home from './pages/Home';
+import ServicesPage from './pages/ServicesPage';
+import AboutPage from './pages/AboutPage';
+import GalleryPage from './pages/GalleryPage';
+import ServiceDetailPage from './pages/ServiceDetailPage';
+import BookingPage from './pages/BookingPage';
 import useReveal from './hooks/useReveal';
 import { missingBusinessData } from './config/business';
 
 export default function App() {
+  const { pathname } = useLocation();
   useReveal();
+
+  // Every page change starts at the top.
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   useEffect(() => {
     if (import.meta.env.DEV) {
@@ -29,15 +34,16 @@ export default function App() {
     <>
       <a href="#main" className="skip-link">Skip to content</a>
       <Header />
-      <main id="main">
-        <HeroSection />
-        <ServicesSection />
-        <AboutSection />
-        <WhyChooseUsSection />
-        <GallerySection />
-        <FAQSection />
-        <BookingSection />
-        <FinalCTASection />
+      <main id="main" className={pathname === '/' ? undefined : 'main--sub'}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/services" element={<ServicesPage />} />
+          <Route path="/services/:id" element={<ServiceDetailPage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/gallery" element={<GalleryPage />} />
+          <Route path="/contact" element={<BookingPage />} />
+          <Route path="*" element={<Home />} />
+        </Routes>
       </main>
       <Footer />
       <MobileCTA />

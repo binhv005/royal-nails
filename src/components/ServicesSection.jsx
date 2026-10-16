@@ -1,10 +1,10 @@
+import { Link, useSearchParams } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 import { ArrowRight, Eye, Feather, Footprints, Hand, Paintbrush, Smile } from 'lucide-react';
 import Img from './Img';
 import Coverflow from './Coverflow';
 import { SectionHeading } from './ui';
 import { SERVICES } from '../data/content';
-import { selectService } from '../lib/serviceSelection';
 
 const SLIDE_MS = 2000;
 
@@ -65,6 +65,7 @@ function ServiceMedia({ service, index }) {
 }
 
 export default function ServicesSection() {
+  const [params] = useSearchParams();
   return (
     <section className="section services" id="services" aria-labelledby="services-title">
       <div className="container">
@@ -81,6 +82,7 @@ export default function ServicesSection() {
         <div className="reveal reveal--rise">
           <Coverflow
             items={SERVICES}
+            focusId={params.get('service')}
             ariaLabel="Our services"
             label={(s) => s.title}
             renderItem={(s, i) => {
@@ -88,15 +90,16 @@ export default function ServicesSection() {
               return (
                 <div id={`service-${s.id}`} className="svc-card">
                   <ServiceMedia service={s} index={i} />
+                  <Link to={`/services/${s.id}`} className="svc-card__cover" tabIndex={-1} aria-hidden="true" draggable="false" />
                   <div className="svc-card__body">
                     <span className="svc-card__icon" aria-hidden="true">
                       <Icon size={22} strokeWidth={1.3} />
                     </span>
                     <h3>{s.title}</h3>
                     <p className="svc-card__tagline">{s.tagline}</p>
-                    <a href="#booking" className="text-link" draggable="false" onClick={() => selectService(s.formValue)}>
+                    <Link to={`/services/${s.id}`} className="text-link" draggable="false">
                       {s.cta} <ArrowRight size={16} strokeWidth={1.6} aria-hidden="true" />
-                    </a>
+                    </Link>
                   </div>
                 </div>
               );
