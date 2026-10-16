@@ -1,19 +1,48 @@
 import { useEffect, useRef, useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import { BookButton, BrandLogo, CallButton } from './ui';
+import { BUSINESS } from '../config/business';
 import { NAV_LINKS } from '../data/content';
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
+  const [theme, setTheme] = useState('top'); // top (over the hero) | wine | cream
   const [open, setOpen] = useState(false);
   const [current, setCurrent] = useState('#home');
   const menuRef = useRef(null);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 16);
-    onScroll();
+    // Which section sits under the bar decides its colour: transparent over the hero,
+    // wine over wine sections and the footer, cream over everything else.
+    const WINE = ['services', 'why', 'faq', 'footer'];
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      setScrolled(window.scrollY > 16);
+      const probe = 40;
+      const els = document.querySelectorAll('main > section, footer');
+      let next = 'cream';
+      for (const el of els) {
+        const r = el.getBoundingClientRect();
+        if (r.top <= probe && r.bottom > probe) {
+          if (el.classList.contains('hero')) next = 'top';
+          else if (WINE.some((n) => el.classList.contains(n))) next = 'wine';
+          break;
+        }
+      }
+      setTheme(next);
+    };
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+    update();
     window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    window.addEventListener('resize', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+      if (frame) cancelAnimationFrame(frame);
+    };
   }, []);
 
   // Highlight the nav link of the section that is currently in view.
@@ -42,7 +71,7 @@ export default function Header() {
   const close = () => setOpen(false);
 
   return (
-    <header className={`header${scrolled ? ' header--scrolled' : ''}${open ? ' header--open' : ''}`}>
+    <header className={`header${scrolled ? ' header--scrolled' : ''}${theme !== 'top' || open ? ' header--solid' : ''}${theme === 'wine' || open ? ' header--dark' : ''}${open ? ' header--open' : ''}`}>
       <div className="container header__inner">
         <BrandLogo />
 
@@ -52,10 +81,13 @@ export default function Header() {
           ))}
         </nav>
 
-        <div className="header__actions">
-          <CallButton variant="outline-light" className="btn--sm" location="header" />
-          <BookButton variant="light" className="btn--sm" location="header" />
-        </div>
+        <p className="header__marquee" aria-label={BUSINESS.tagline}>
+          <span className="header__marquee-track" aria-hidden="true">
+            {[0, 1, 2, 3].map((i) => (
+              <span key={i}>{BUSINESS.tagline}</span>
+            ))}
+          </span>
+        </p>
 
         <button
           type="button"
