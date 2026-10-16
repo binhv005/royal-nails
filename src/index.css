@@ -427,45 +427,17 @@ ol {
   position: sticky;
   top: 0;
   z-index: 100;
-  /* Transparent over the hero: the hero slides up underneath the header */
-  margin-bottom: calc(var(--header-h) * -1);
-  background: transparent;
-  color: var(--wine);
-  transition: background-color var(--t) var(--ease), box-shadow var(--t) var(--ease);
-}
-
-/* Once the page scrolls (or the mobile menu is open) the header takes the section background */
-.header--scrolled,
-.header--open {
-  background: var(--cream);
+  background: var(--wine);
+  color: var(--cream);
+  transition: box-shadow var(--t) var(--ease);
 }
 
 .header--scrolled {
-  box-shadow: 0 12px 30px -22px rgba(112, 44, 59, 0.45);
+  box-shadow: 0 12px 30px -20px rgba(51, 25, 32, 0.7);
 }
 
 .header :focus-visible {
-  outline-color: var(--wine);
-}
-
-/* Header buttons: wine on the light header */
-.header .btn--light {
-  background: var(--wine);
-  color: var(--cream);
-}
-
-.header .btn--light:hover {
-  background: var(--wine-dark);
-}
-
-.header .btn--outline-light {
-  border-color: rgba(112, 44, 59, 0.45);
-  color: var(--wine);
-}
-
-.header .btn--outline-light:hover {
-  border-color: var(--wine);
-  background: rgba(112, 44, 59, 0.06);
+  outline-color: var(--cream);
 }
 
 .header__inner {
@@ -490,7 +462,7 @@ ol {
   border: 0;
   border-radius: var(--radius);
   background: none;
-  color: var(--wine);
+  color: var(--cream);
   cursor: pointer;
 }
 
@@ -563,8 +535,8 @@ ol {
   display: flex;
   align-items: flex-start;
   width: 100%;
-  min-height: max(600px, 100svh);
-  padding: calc(var(--header-h) + var(--s-5)) 0 var(--s-6);
+  min-height: max(560px, calc(100svh - var(--header-h)));
+  padding: var(--s-6) 0;
   background:
     linear-gradient(180deg, rgba(255, 249, 243, 0.94) 0%, rgba(255, 249, 243, 0.7) 42%, rgba(255, 249, 243, 0) 68%),
     var(--petal) url('/d95f18d6-b9e3-487d-8b33-168634ebfd63.jpg') 72% bottom / cover no-repeat;
@@ -2070,14 +2042,14 @@ ol {
     right: 0;
     bottom: 2px;
     height: 1px;
-    background: var(--lotus);
+    background: var(--blush);
     transform: scaleX(0);
     transition: transform var(--t) var(--ease);
   }
 
   .header__nav a:hover,
   .header__nav a.is-active {
-    color: var(--lotus-deep);
+    color: var(--blush);
   }
 
   .header__nav a.is-active::after {
@@ -2132,8 +2104,8 @@ ol {
   .hero {
     align-items: center;
     width: 100%;
-    min-height: max(620px, 100svh);
-    padding: var(--header-h) 0 0;
+    min-height: max(560px, calc(100svh - var(--header-h)));
+    padding: 0;
     background:
       linear-gradient(90deg, rgba(255, 249, 243, 0.72) 0%, rgba(255, 249, 243, 0.35) 38%, rgba(255, 249, 243, 0) 55%),
       var(--petal) url('/d95f18d6-b9e3-487d-8b33-168634ebfd63.jpg') right center / cover no-repeat;

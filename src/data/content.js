@@ -1,9 +1,25 @@
 // Page content: services, imagery, FAQ. Business details live in config/business.js.
 //
-// DEMO IMAGES: every photo below is a licensed Unsplash placeholder, NOT a photo of
-// Royal Nail Store. Replace each `src` with the salon's own photography before launch.
-
-const unsplash = (id) => `https://images.unsplash.com/photo-${id}`;
+// Images live in public/<Folder>/ and are referenced by absolute path.
+const IMG = {
+  manicure: ['23449da1aef18148df58a26fe6584ac7', '69d41d299a8f33b1a5e9dd390af411b8', '8b16ce6e0c96ffe6d6a5b61f3124313e'],
+  pedicure: ['181681ca6e56b4ea8d8c5b454e0a7850', '1a278abef4457eb7c6eb3b303fe4731b', 'a717618386a40ad7810fd57da7c1d0a6'],
+  nailArt: ['4b1e56a94b0dcbc3512b76e35fc38d81', '69300abff7d71f6c6a58dc5b68db77e8', '6adbe6a1b27c949f416e8c15372320ca', '86008f2fb5edb527416d3b94a13b4894'],
+  facial: ['0bdc1b13923be2b4686488a874f7b353', '2d3babd45c85707021ba484d6b560716', 'd6871c116de40f19f0b92c3871d1975c', 'fdc4051627ff930ccd716a523706449c'],
+  waxing: ['5bdc293699845e72c1cc12e52b92022f', 'cb4a2feeaba355828b2d5b12e232405b'],
+  eyelash: ['026e0310c725eba38195681ce6227bc9', '8e1877642a1e163ca6a8965beef4d157', '91d2dbd741842339c7713f0f0cef31d8', 'a6c3737c3b44348b8ce7bd2b17b274e2'],
+};
+const FOLDER = { manicure: 'Manicure', pedicure: 'Pedicure', nailArt: 'Nails-Art', facial: 'Facial', waxing: 'Waxing', eyelash: 'Eyelashes' };
+const ALT = {
+  manicure: 'Manicured nails at Royal Nail Store',
+  pedicure: 'Relaxing pedicure at Royal Nail Store',
+  nailArt: 'Custom nail art design',
+  facial: 'Relaxing facial treatment',
+  waxing: 'Waxing and brow service',
+  eyelash: 'Eyelash service',
+};
+const pic = (cat, i) => `/${FOLDER[cat]}/${IMG[cat][i]}.jpg`;
+const photo = (cat, i) => ({ src: pic(cat, i), alt: ALT[cat] });
 
 export const NAV_LINKS = [
   { label: 'Home', href: '#home' },
@@ -16,23 +32,11 @@ export const NAV_LINKS = [
 
 export const IMAGES = {
   about: {
-    main: {
-      src: unsplash('1522337660859-02fbefca4702'), // demo
-      alt: 'Hands with fresh pink polish as a manicure is finished',
-    },
-    small: [
-      { src: unsplash('1632345031435-8727f6897d53'), alt: 'Nail technician shaping a guest’s nails beside an LED lamp' }, // demo
-      { src: unsplash('1457972729786-0411a3b2b626'), alt: 'Nail technician carefully painting a guest’s nails' }, // demo
-    ],
+    main: photo('manicure', 0),
+    small: [photo('nailArt', 0), photo('manicure', 1)],
   },
-  why: {
-    src: unsplash('1599206676335-193c82b13c9e'), // demo
-    alt: 'Manicure in progress on a white marble table',
-  },
-  cta: {
-    src: unsplash('1509967419530-da38b4704bc6'), // demo
-    alt: 'Woman with a sleek bob gently touching her neck against a soft lilac backdrop',
-  },
+  why: photo('pedicure', 0),
+  cta: photo('facial', 0),
 };
 
 // Each service shows `image`, then cycles through `more` (all related demo photos).
@@ -45,13 +49,11 @@ export const SERVICES = [
     tagline: 'Beautifully groomed hands, polished to perfection.',
     cta: 'Explore Manicure',
     formValue: 'Manicure',
-    image: unsplash('1610992015732-2449b76344bc'), // demo
-    alt: 'Soft nude manicure on a white faux-fur surface',
+    image: pic('manicure', 0),
+    alt: ALT.manicure,
     more: [
-      { src: unsplash('1522337660859-02fbefca4702'), alt: 'Pink polish being applied to a manicured hand' },
-      { src: unsplash('1457972729786-0411a3b2b626'), alt: 'Nail technician painting a guest’s nails' },
-      { src: unsplash('1604902396830-aca29e19b067'), alt: 'Mauve almond-shaped manicure on a blush pink background' },
-      { src: unsplash('1515377905703-c4788e51af15'), alt: 'Cuticle oil dropped onto a hand during nail care' },
+      photo('manicure', 1),
+      photo('manicure', 2),
     ],
     position: '50% 55%',
   },
@@ -61,11 +63,11 @@ export const SERVICES = [
     tagline: 'Relax, refresh and let every detail shine.',
     cta: 'Explore Pedicure',
     formValue: 'Pedicure',
-    image: unsplash('1519415510236-718bdfcd89c8'), // demo
-    alt: 'Feet resting in a pedicure bowl with orchid petals',
+    image: pic('pedicure', 0),
+    alt: ALT.pedicure,
     more: [
-      { src: unsplash('1600334129128-685c5582fd35'), alt: 'Warm spa stones and white orchids for a relaxing treatment' },
-      { src: unsplash('1507652313519-d4e9174996dd'), alt: 'Calm spa bathroom with a soft pink soaking tub' },
+      photo('pedicure', 1),
+      photo('pedicure', 2),
     ],
     position: '50% 50%',
   },
@@ -75,12 +77,12 @@ export const SERVICES = [
     tagline: 'Express your style through artful, one-of-a-kind nails.',
     cta: 'Discover Nail Art',
     formValue: 'Nail Art',
-    image: unsplash('1607779097040-26e80aa78e66'), // demo
-    alt: 'Milky white and lilac nails with a silver glitter accent on a cream knit sweater',
+    image: pic('nailArt', 0),
+    alt: ALT.nailArt,
     more: [
-      { src: unsplash('1519014816548-bf5fe059798b'), alt: 'Red almond nails with a hand-drawn heart design' },
-      { src: unsplash('1604654894610-df63bc536371'), alt: 'Tortoiseshell and glossy black nail designs' },
-      { src: unsplash('1571290274554-6a2eaa771e5f'), alt: 'Colorful abstract nail art on both hands' },
+      photo('nailArt', 1),
+      photo('nailArt', 2),
+      photo('nailArt', 3),
     ],
     position: '50% 45%',
   },
@@ -90,13 +92,12 @@ export const SERVICES = [
     tagline: 'A gentle moment of care for your natural glow.',
     cta: 'Explore Facials',
     formValue: 'Facial Treatments',
-    image: unsplash('1616394584738-fc6e612e71b9'), // demo
-    alt: 'Guest relaxing with a cream facial mask and soft headband at a spa',
+    image: pic('facial', 0),
+    alt: ALT.facial,
     more: [
-      { src: unsplash('1570172619644-dfd03ed5d881'), alt: 'Guest enjoying a facial mask treatment at a spa' },
-      { src: unsplash('1596755389378-c31d21fd1273'), alt: 'Fresh face mask with an avocado for a natural glow' },
-      { src: unsplash('1596178060671-7a80dc8059ea'), alt: 'Guest relaxing during a facial with a flower bowl nearby' },
-      { src: unsplash('1552693673-1bf958298935'), alt: 'Esthetician in gloves performing a facial treatment' },
+      photo('facial', 1),
+      photo('facial', 2),
+      photo('facial', 3),
     ],
     position: '40% 50%',
   },
@@ -106,11 +107,10 @@ export const SERVICES = [
     tagline: 'Feel fresh, smooth and confidently yourself.',
     cta: 'Learn About Waxing',
     formValue: 'Waxing',
-    image: unsplash('1540555700478-4be289fbecef'), // demo
-    alt: 'Clean spa setting with a rolled towel, body care bottle, candle and pink tulips',
+    image: pic('waxing', 0),
+    alt: ALT.waxing,
     more: [
-      { src: unsplash('1519415387722-a1c3bbef716c'), alt: 'Eyebrow threading for a clean, defined shape' },
-      { src: unsplash('1512290923902-8a9f81dc236c'), alt: 'Gentle hair removal treatment on the face' },
+      photo('waxing', 1),
     ],
     position: '50% 50%',
   },
@@ -120,11 +120,12 @@ export const SERVICES = [
     tagline: 'Enhance your natural beauty, one lash at a time.',
     cta: 'Explore Eyelash Services',
     formValue: 'Eyelash Services',
-    image: unsplash('1589710751893-f9a6770ad71b'), // demo
-    alt: 'Lash artist carefully applying eyelash extensions to a guest with closed eyes',
+    image: pic('eyelash', 0),
+    alt: ALT.eyelash,
     more: [
-      { src: unsplash('1487412947147-5cebf100ffc2'), alt: 'Defined lashes and winged eyeliner on a soft glam look' },
-      { src: unsplash('1631214524020-7e18db9a8f92'), alt: 'Liquid eyeliner pen on a pink backdrop' },
+      photo('eyelash', 1),
+      photo('eyelash', 2),
+      photo('eyelash', 3),
     ],
     position: '50% 40%',
   },
@@ -160,9 +161,9 @@ export const GALLERY = [
     label: 'Your Beauty Moment',
     caption: 'Nails, facials and more in one relaxing visit',
     slides: [
-      { src: '/form.jpg', local: true, alt: 'Guest relaxing in a towel wrap with candles, orchids and beauty tools' },
-      { src: unsplash('1596755389378-c31d21fd1273'), alt: 'Fresh face mask with an avocado for a natural glow' },
-      { src: unsplash('1604902396830-aca29e19b067'), alt: 'Mauve almond-shaped manicure on a blush pink background' },
+      photo('manicure', 2),
+      photo('facial', 1),
+      photo('nailArt', 1),
     ],
   },
   {
@@ -171,9 +172,9 @@ export const GALLERY = [
     label: 'Nail Art',
     caption: 'Bold, playful designs',
     slides: [
-      { src: unsplash('1571290274554-6a2eaa771e5f'), alt: 'Colorful abstract nail art on both hands' },
-      { src: unsplash('1519014816548-bf5fe059798b'), alt: 'Red almond nails with a hand-drawn heart design' },
-      { src: unsplash('1604654894610-df63bc536371'), alt: 'Tortoiseshell and glossy black nail designs' },
+      photo('nailArt', 2),
+      photo('nailArt', 3),
+      photo('nailArt', 0),
     ],
   },
   {
@@ -182,9 +183,9 @@ export const GALLERY = [
     label: 'Manicure',
     caption: 'Soft, polished neutrals',
     slides: [
-      { src: unsplash('1610992015732-2449b76344bc'), alt: 'Soft nude manicure on a white faux-fur surface' },
-      { src: unsplash('1515377905703-c4788e51af15'), alt: 'Cuticle oil dropped onto a hand during nail care' },
-      { src: unsplash('1522337660859-02fbefca4702'), alt: 'Pink polish being applied to a manicured hand' },
+      photo('manicure', 0),
+      photo('manicure', 1),
+      photo('manicure', 2),
     ],
   },
   {
@@ -193,9 +194,9 @@ export const GALLERY = [
     label: 'Facial',
     caption: 'Glow from within',
     slides: [
-      { src: unsplash('1552693673-1bf958298935'), alt: 'Esthetician in gloves performing a facial treatment' },
-      { src: unsplash('1596178060671-7a80dc8059ea'), alt: 'Guest relaxing during a facial with a flower bowl nearby' },
-      { src: unsplash('1570172619644-dfd03ed5d881'), alt: 'Guest enjoying a facial mask treatment at a spa' },
+      photo('facial', 2),
+      photo('facial', 3),
+      photo('facial', 0),
     ],
   },
   {
@@ -204,9 +205,9 @@ export const GALLERY = [
     label: 'Pedicure',
     caption: 'Relax, refresh, shine',
     slides: [
-      { src: unsplash('1519415510236-718bdfcd89c8'), alt: 'Feet resting in a pedicure bowl with orchid petals' },
-      { src: unsplash('1600334129128-685c5582fd35'), alt: 'Warm spa stones and white orchids for a relaxing treatment' },
-      { src: unsplash('1507652313519-d4e9174996dd'), alt: 'Calm spa bathroom with a soft pink soaking tub' },
+      photo('pedicure', 0),
+      photo('pedicure', 1),
+      photo('pedicure', 2),
     ],
   },
   {
@@ -215,9 +216,9 @@ export const GALLERY = [
     label: 'Nail Color',
     caption: 'A shade for every mood',
     slides: [
-      { src: unsplash('1599948128020-9a44505b0d1b'), alt: 'Assorted nail polish bottles on a lilac background' },
-      { src: unsplash('1457972729786-0411a3b2b626'), alt: 'Nail technician carefully painting a guest’s nails' },
-      { src: unsplash('1632345031435-8727f6897d53'), alt: 'Nail technician shaping a guest’s nails beside an LED lamp' },
+      photo('nailArt', 1),
+      photo('manicure', 1),
+      photo('nailArt', 3),
     ],
   },
   {
@@ -226,9 +227,9 @@ export const GALLERY = [
     label: 'Lashes',
     caption: 'Defined, effortless',
     slides: [
-      { src: unsplash('1589710751893-f9a6770ad71b'), alt: 'Lash artist carefully applying eyelash extensions' },
-      { src: unsplash('1487412947147-5cebf100ffc2'), alt: 'Defined lashes and winged eyeliner on a soft glam look' },
-      { src: unsplash('1631214524020-7e18db9a8f92'), alt: 'Liquid eyeliner pen on a pink backdrop' },
+      photo('eyelash', 0),
+      photo('eyelash', 1),
+      photo('eyelash', 2),
     ],
   },
   {
@@ -237,9 +238,9 @@ export const GALLERY = [
     label: 'Waxing',
     caption: 'Smooth and confident',
     slides: [
-      { src: unsplash('1519415387722-a1c3bbef716c'), alt: 'Eyebrow threading for a clean, defined shape' },
-      { src: unsplash('1512290923902-8a9f81dc236c'), alt: 'Gentle hair removal treatment on the face' },
-      { src: unsplash('1540555700478-4be289fbecef'), alt: 'Clean spa setting with towel, candle and pink tulips' },
+      photo('waxing', 0),
+      photo('waxing', 1),
+      photo('eyelash', 3),
     ],
   },
   {
@@ -248,9 +249,9 @@ export const GALLERY = [
     label: 'Spa Moments',
     caption: 'A quiet pause, just for you',
     slides: [
-      { src: unsplash('1560750588-73207b1ef5b8'), alt: 'Calm spa courtyard with a small plunge pool' },
-      { src: unsplash('1519824145371-296894a0daa9'), alt: 'Relaxing back massage with hot stones' },
-      { src: unsplash('1544161515-4ab6ce6db874'), alt: 'Warm oil being applied during a massage' },
+      photo('pedicure', 2),
+      photo('facial', 1),
+      photo('waxing', 1),
     ],
   },
 ];
