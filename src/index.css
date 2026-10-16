@@ -2096,6 +2096,41 @@ ol {
   font-size: 0.9375rem;
 }
 
+/* FAQ: two photos flank the list on wide screens */
+.faq__photo {
+  display: none;
+}
+
+@media (min-width: 1100px) {
+  .faq__body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 700px) minmax(0, 1fr);
+    align-items: center;
+    gap: var(--s-4);
+  }
+
+  .faq__photo {
+    display: block;
+    width: 100%;
+    max-width: 230px;
+    aspect-ratio: 3 / 5;
+    object-fit: cover;
+    border-radius: 22px;
+    border: 1px solid rgba(255, 249, 243, 0.25);
+    box-shadow: 0 26px 44px -24px rgba(20, 8, 12, 0.8);
+  }
+
+  .faq__photo--left {
+    justify-self: end;
+    rotate: -3deg;
+  }
+
+  .faq__photo--right {
+    justify-self: start;
+    rotate: 3deg;
+  }
+}
+
 /* ==========================================================================
    Breakpoints
    ========================================================================== */

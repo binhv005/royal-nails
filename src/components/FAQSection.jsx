@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Plus } from 'lucide-react';
 import { SectionHeading } from './ui';
-import { SERVICES } from '../data/content';
+import { FAQ_IMAGES, SERVICES } from '../data/content';
 import { BUSINESS, fullAddress, locationLabel } from '../config/business';
 import { isAppointmentApiConfigured } from '../lib/appointmentApi';
 
@@ -62,29 +62,33 @@ export default function FAQSection() {
         <div className="reveal">
           <SectionHeading id="faq-title" title={['Frequently asked', 'questions']} align="center" className="heading--inline" light />
         </div>
-        <div className="faq__list reveal reveal--rise">
-          {faqs.map((item, i) => {
-            const open = openIndex === i;
-            return (
-              <div key={item.q} className={`faq__item${open ? ' is-open' : ''}`}>
-                <h3>
-                  <button
-                    type="button"
-                    id={`faq-q-${i}`}
-                    aria-expanded={open}
-                    aria-controls={`faq-a-${i}`}
-                    onClick={() => setOpenIndex(open ? null : i)}
-                  >
-                    {item.q}
-                    <Plus size={20} strokeWidth={1.4} aria-hidden="true" />
-                  </button>
-                </h3>
-                <div id={`faq-a-${i}`} role="region" aria-labelledby={`faq-q-${i}`} className="faq__answer" hidden={!open}>
-                  <p>{item.a}</p>
+        <div className="faq__body">
+          <img className="faq__photo faq__photo--left reveal reveal--zoom" src={FAQ_IMAGES[0]} alt="" loading="lazy" decoding="async" />
+          <div className="faq__list reveal reveal--rise">
+            {faqs.map((item, i) => {
+              const open = openIndex === i;
+              return (
+                <div key={item.q} className={`faq__item${open ? ' is-open' : ''}`}>
+                  <h3>
+                    <button
+                      type="button"
+                      id={`faq-q-${i}`}
+                      aria-expanded={open}
+                      aria-controls={`faq-a-${i}`}
+                      onClick={() => setOpenIndex(open ? null : i)}
+                    >
+                      {item.q}
+                      <Plus size={20} strokeWidth={1.4} aria-hidden="true" />
+                    </button>
+                  </h3>
+                  <div id={`faq-a-${i}`} role="region" aria-labelledby={`faq-q-${i}`} className="faq__answer" hidden={!open}>
+                    <p>{item.a}</p>
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
+          <img className="faq__photo faq__photo--right reveal reveal--zoom" src={FAQ_IMAGES[1]} alt="" loading="lazy" decoding="async" />
         </div>
       </div>
     </section>

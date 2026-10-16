@@ -131,6 +131,9 @@ export const SERVICES = [
   },
 ];
 
+// Decorative photos flanking the FAQ list (desktop only).
+export const FAQ_IMAGES = [pic('eyelash', 0), pic('nailArt', 1)];
+
 export const SERVICE_OPTIONS = [...SERVICES.map((s) => s.formValue), 'Multiple Services', 'Other'];
 
 export const FEATURES = [
